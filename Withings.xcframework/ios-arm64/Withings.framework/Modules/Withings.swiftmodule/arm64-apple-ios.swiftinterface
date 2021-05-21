@@ -1,6 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)
+// swift-compiler-version: Apple Swift version 5.4 (swiftlang-1205.0.26.9 clang-1205.0.19.55)
 // swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name Withings
+import BLEWrapper
 import CommonCrypto
 import CoreBluetooth
 import Foundation
@@ -9,13 +10,25 @@ import Swift
 import UIKit
 import WebKit
 import zlib
-@objc @_inheritsConvenienceInitializers public class WithingsBackgroundSyncManager : ObjectiveC.NSObject {
-  public class func start(with deviceKeys: [Swift.String])
+@objc @_inheritsConvenienceInitializers public class WithingsSyncManager : ObjectiveC.NSObject {
+  public enum Status : Swift.Equatable {
+    case started(deviceKeys: [Swift.String])
+    case backgroundPaused
+    case stopped
+    public var isStarted: Swift.Bool {
+      get
+    }
+    public static func == (a: Withings.WithingsSyncManager.Status, b: Withings.WithingsSyncManager.Status) -> Swift.Bool
+  }
+  public class var status: Withings.WithingsSyncManager.Status {
+    get
+  }
+  @objc override dynamic public init()
+  public class func start(with deviceKeys: [Swift.String], allowBackgroundScan: Swift.Bool = true)
   public class func stop()
   @objc deinit
-  @objc override dynamic public init()
 }
-public enum WithingsBackgroundSyncStatus {
+public enum WithingsSyncStatus {
   case started(Swift.String)
   case succeeded(Swift.String)
   case failed(Swift.String)
@@ -73,7 +86,7 @@ public protocol Engine {
   func write(data: Foundation.Data, opcode: Withings.FrameOpCode, completion: (() -> ())?)
   func write(string: Swift.String, completion: (() -> ())?)
 }
-@objc @_inheritsConvenienceInitializers @available(OSX 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+@objc @_inheritsConvenienceInitializers @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 public class NativeEngine : ObjectiveC.NSObject, Withings.Engine, Foundation.URLSessionDataDelegate, Foundation.URLSessionWebSocketDelegate {
   public func register(delegate: Withings.EngineDelegate)
   public func start(request: Foundation.URLRequest)
@@ -83,8 +96,8 @@ public class NativeEngine : ObjectiveC.NSObject, Withings.Engine, Foundation.URL
   public func write(data: Foundation.Data, opcode: Withings.FrameOpCode, completion: (() -> ())?)
   @objc public func urlSession(_ session: Foundation.URLSession, webSocketTask: Foundation.URLSessionWebSocketTask, didOpenWithProtocol protocol: Swift.String?)
   @objc public func urlSession(_ session: Foundation.URLSession, webSocketTask: Foundation.URLSessionWebSocketTask, didCloseWith closeCode: Foundation.URLSessionWebSocketTask.CloseCode, reason: Foundation.Data?)
-  @objc deinit
   @objc override dynamic public init()
+  @objc deinit
 }
 public class WSEngine : Withings.Engine, Withings.TransportEventClient, Withings.FramerEventClient, Withings.FrameCollectorDelegate, Withings.HTTPHandlerDelegate {
   public var respondToPingWithPong: Swift.Bool
@@ -140,11 +153,11 @@ public enum CloseCode : Swift.UInt16 {
   case encoding
   case policyViolated
   case messageTooBig
+  public init?(rawValue: Swift.UInt16)
   public typealias RawValue = Swift.UInt16
   public var rawValue: Swift.UInt16 {
     get
   }
-  public init?(rawValue: Swift.UInt16)
 }
 public enum FrameOpCode : Swift.UInt8 {
   case continueFrame
@@ -154,8 +167,8 @@ public enum FrameOpCode : Swift.UInt8 {
   case ping
   case pong
   case unknown
-  public typealias RawValue = Swift.UInt8
   public init?(rawValue: Swift.UInt8)
+  public typealias RawValue = Swift.UInt8
   public var rawValue: Swift.UInt8 {
     get
   }
@@ -244,10 +257,10 @@ public class StringHTTPHandler : Withings.HTTPHandler {
 public enum FoundationSecurityError : Swift.Error {
   case invalidRequest
   public static func == (a: Withings.FoundationSecurityError, b: Withings.FoundationSecurityError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
   public var hashValue: Swift.Int {
     get
   }
-  public func hash(into hasher: inout Swift.Hasher)
 }
 public class FoundationSecurity {
   public init(allowSelfSigned: Swift.Bool = false)
@@ -262,11 +275,11 @@ extension FoundationSecurity : Withings.HeaderValidator {
 public enum SecurityErrorCode : Swift.UInt16 {
   case acceptFailed
   case pinningFailed
+  public init?(rawValue: Swift.UInt16)
   public typealias RawValue = Swift.UInt16
   public var rawValue: Swift.UInt16 {
     get
   }
-  public init?(rawValue: Swift.UInt16)
 }
 public enum PinningState {
   case success
@@ -304,7 +317,7 @@ public enum ServerEvent {
 public protocol Server {
   func start(address: Swift.String, port: Swift.UInt16) -> Swift.Error?
 }
-@available(OSX 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
+@available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
 @available(watchOS, unavailable)
 public class WebSocketServer : Withings.Server, Withings.ConnectionDelegate {
   public var onEvent: ((Withings.ServerEvent) -> Swift.Void)?
@@ -313,7 +326,7 @@ public class WebSocketServer : Withings.Server, Withings.ConnectionDelegate {
   public func didReceive(event: Withings.ServerEvent)
   @objc deinit
 }
-@_hasMissingDesignatedInitializers @available(OSX 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
+@_hasMissingDesignatedInitializers @available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
 public class ServerConnection : Withings.Connection, Withings.HTTPServerDelegate, Withings.FramerEventClient, Withings.FrameCollectorDelegate, Withings.TransportEventClient {
   public var onEvent: ((Withings.ConnectionEvent) -> Swift.Void)?
   weak public var delegate: Withings.ConnectionDelegate?
@@ -331,10 +344,10 @@ public enum ErrorType : Swift.Error {
   case protocolError
   case serverError
   public static func == (a: Withings.ErrorType, b: Withings.ErrorType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
   public var hashValue: Swift.Int {
     get
   }
-  public func hash(into hasher: inout Swift.Hasher)
 }
 public struct WSError : Swift.Error {
   public let type: Withings.ErrorType
@@ -400,10 +413,10 @@ public enum FoundationTransportError : Swift.Error {
   case invalidOutputStream
   case timeout
   public static func == (a: Withings.FoundationTransportError, b: Withings.FoundationTransportError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
   public var hashValue: Swift.Int {
     get
   }
-  public func hash(into hasher: inout Swift.Hasher)
 }
 @objc public class FoundationTransport : ObjectiveC.NSObject, Withings.Transport, Foundation.StreamDelegate {
   public var usingTLS: Swift.Bool {
@@ -421,12 +434,12 @@ public enum FoundationTransportError : Swift.Error {
 public enum TCPTransportError : Swift.Error {
   case invalidRequest
   public static func == (a: Withings.TCPTransportError, b: Withings.TCPTransportError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
   public var hashValue: Swift.Int {
     get
   }
-  public func hash(into hasher: inout Swift.Hasher)
 }
-@available(OSX 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
+@available(macOS 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
 public class TCPTransport : Withings.Transport {
   public var usingTLS: Swift.Bool {
     get
