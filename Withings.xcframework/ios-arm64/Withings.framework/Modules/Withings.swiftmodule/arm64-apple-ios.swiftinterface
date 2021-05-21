@@ -1,7 +1,6 @@
 // swift-interface-format-version: 1.0
 // swift-compiler-version: Apple Swift version 5.4 (swiftlang-1205.0.26.9 clang-1205.0.19.55)
 // swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name Withings
-import BLEWrapper
 import CommonCrypto
 import CoreBluetooth
 import Foundation
@@ -10,6 +9,153 @@ import Swift
 import UIKit
 import WebKit
 import zlib
+public enum BLEWrapperError : Swift.Error {
+  public enum BluetoothUnavailbleFailureReason {
+    case unsupported
+    case unauthorized
+    case poweredOff
+    case unknown
+    public static func == (a: Withings.BLEWrapperError.BluetoothUnavailbleFailureReason, b: Withings.BLEWrapperError.BluetoothUnavailbleFailureReason) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum Operation : Swift.String {
+    case connectPeripheral
+    case disconnectPeripheral
+    case readRSSI
+    case discoverServices
+    case discoverIncludedServices
+    case discoverCharacteristics
+    case readCharacteristic
+    case writeCharacteristic
+    case updateNotificationStatus
+    public init?(rawValue: Swift.String)
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  case bluetoothUnavailable(reason: Withings.BLEWrapperError.BluetoothUnavailbleFailureReason)
+  case scanningEndedUnexpectedly
+  case operationTimedOut(operation: Withings.BLEWrapperError.Operation)
+  case invalidPeripheral
+  case peripheralFailedToConnectReasonUnknown
+  case peripheralServiceNotFound(missingServicesUUIDs: [CoreBluetooth.CBUUID])
+  case peripheralCharacteristicNotFound(missingCharacteristicsUUIDs: [CoreBluetooth.CBUUID])
+}
+extension BLEWrapperError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+extension BLEWrapperError.BluetoothUnavailbleFailureReason {
+  public var localizedDescription: Swift.String {
+    get
+  }
+}
+extension NSNotification.Name {
+  public static let CentralStateChange: Foundation.Notification.Name
+  public static let PeripheralCharacteristicValueUpdate: Foundation.Notification.Name
+}
+public enum PeripheralScanResult {
+  case scanStarted
+  case scanResult(peripheral: Withings.Peripheral, advertisementData: [Swift.String : Any], RSSI: Swift.Int?)
+  case scanStopped(peripherals: [Withings.Peripheral], error: Withings.BLEWrapperError?)
+}
+public enum AsyncCentralState : Swift.Int {
+  case unsupported
+  case unauthorized
+  case poweredOff
+  case poweredOn
+  case unknown
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public typealias AsyncCentralStateCallback = (Withings.AsyncCentralState) -> Swift.Void
+public typealias BluetoothStateCallback = (CoreBluetooth.CBManagerState) -> Swift.Void
+public typealias PeripheralScanCallback = (Withings.PeripheralScanResult) -> Swift.Void
+public typealias ConnectPeripheralCallback = (Swift.Result<Swift.Void, Swift.Error>) -> Swift.Void
+public typealias DisconnectPeripheralCallback = (Swift.Result<Swift.Void, Swift.Error>) -> Swift.Void
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class BLEWrapper : ObjectiveC.NSObject {
+  @objc deinit
+}
+extension BLEWrapper {
+  final public var state: CoreBluetooth.CBManagerState {
+    get
+  }
+  final public class func retrievePeripherals(withUUIDs uuids: [Withings.CBUUIDConvertible]) -> [Withings.Peripheral]
+  final public class func retrieveConnectedPeripherals(withServiceUUIDs uuids: [Withings.CBUUIDConvertible]) -> [Withings.Peripheral]
+  final public class func scanForPeripherals(withServiceUUIDs serviceUUIDs: [Withings.CBUUIDConvertible]? = nil, options: [Swift.String : Any]? = nil, timeoutAfter timeout: Foundation.TimeInterval, completion: @escaping Withings.PeripheralScanCallback)
+  final public class func stopScan()
+  final public class func connect(peripheral: CoreBluetooth.CBPeripheral, timeout: Foundation.TimeInterval = 10, _ callback: @escaping Withings.ConnectPeripheralCallback)
+  final public class func disconnect(peripheral: CoreBluetooth.CBPeripheral, timeout: Foundation.TimeInterval = 10, _ callback: @escaping Withings.DisconnectPeripheralCallback)
+}
+extension BLEWrapper : CoreBluetooth.CBCentralManagerDelegate {
+  @objc final public func centralManagerDidUpdateState(_ central: CoreBluetooth.CBCentralManager)
+  @objc final public func centralManager(_ central: CoreBluetooth.CBCentralManager, didConnect peripheral: CoreBluetooth.CBPeripheral)
+  @objc final public func centralManager(_ central: CoreBluetooth.CBCentralManager, didDisconnectPeripheral peripheral: CoreBluetooth.CBPeripheral, error: Swift.Error?)
+  @objc final public func centralManager(_ central: CoreBluetooth.CBCentralManager, didFailToConnect peripheral: CoreBluetooth.CBPeripheral, error: Swift.Error?)
+  @objc final public func centralManager(_ central: CoreBluetooth.CBCentralManager, didDiscover peripheral: CoreBluetooth.CBPeripheral, advertisementData: [Swift.String : Any], rssi RSSI: Foundation.NSNumber)
+}
+public protocol CBUUIDConvertible {
+  var cbuuid: CoreBluetooth.CBUUID { get }
+}
+extension UUID : Withings.CBUUIDConvertible {
+  public var cbuuid: CoreBluetooth.CBUUID {
+    get
+  }
+}
+extension CBAttribute : Withings.CBUUIDConvertible {
+  public var cbuuid: CoreBluetooth.CBUUID {
+    get
+  }
+}
+public func ExtractCBUUIDs(_ CBUUIDConvertibles: [Withings.CBUUIDConvertible]?) -> [CoreBluetooth.CBUUID]?
+public typealias rssi = Swift.Int
+public typealias isNotifying = Swift.Bool
+public typealias ReadRSSIRequestCallback = (Swift.Result<Withings.rssi, Swift.Error>) -> Swift.Void
+public typealias ServiceRequestCallback = (Swift.Result<[CoreBluetooth.CBService], Swift.Error>) -> Swift.Void
+public typealias CharacteristicRequestCallback = (Swift.Result<[CoreBluetooth.CBCharacteristic], Swift.Error>) -> Swift.Void
+public typealias ReadCharacRequestCallback = (Swift.Result<Foundation.Data, Swift.Error>) -> Swift.Void
+public typealias WriteRequestCallback = (Swift.Result<Swift.Void, Swift.Error>) -> Swift.Void
+public typealias UpdateNotificationStateCallback = (Swift.Result<Withings.isNotifying, Swift.Error>) -> Swift.Void
+@_hasMissingDesignatedInitializers final public class Peripheral {
+  @objc deinit
+}
+extension Peripheral : Swift.Equatable {
+  public static func == (lhs: Withings.Peripheral, rhs: Withings.Peripheral) -> Swift.Bool
+  final public var identifier: Foundation.UUID {
+    get
+  }
+  final public var name: Swift.String? {
+    get
+  }
+  final public var state: CoreBluetooth.CBPeripheralState {
+    get
+  }
+  final public var services: [CoreBluetooth.CBService]? {
+    get
+  }
+  final public func service(withUUID serviceUUID: Withings.CBUUIDConvertible) -> CoreBluetooth.CBService?
+  final public func characteristic(withUUID characteristicUUID: Withings.CBUUIDConvertible, ofServiceWithUUID serviceUUID: Withings.CBUUIDConvertible) -> CoreBluetooth.CBCharacteristic?
+  final public func connect(withTimeout timeout: Foundation.TimeInterval?, completion: @escaping Withings.ConnectPeripheralCallback)
+  final public func disconnect(completion: @escaping Withings.DisconnectPeripheralCallback)
+  final public func readRSSI(completion: @escaping Withings.ReadRSSIRequestCallback)
+  final public func discoverServices(withUUIDs serviceUUIDs: [Withings.CBUUIDConvertible]? = nil, completion: @escaping Withings.ServiceRequestCallback)
+  final public func discoverIncludedServices(withUUIDs includedServiceUUIDs: [Withings.CBUUIDConvertible]? = nil, ofServiceWithUUID serviceUUID: Withings.CBUUIDConvertible, completion: @escaping Withings.ServiceRequestCallback)
+  final public func discoverCharacteristics(withUUIDs characteristicUUIDs: [Withings.CBUUIDConvertible]? = nil, ofServiceWithUUID serviceUUID: Withings.CBUUIDConvertible, completion: @escaping Withings.CharacteristicRequestCallback)
+  final public func readValue(ofCharacWithUUID characUUID: Withings.CBUUIDConvertible, fromServiceWithUUID serviceUUID: Withings.CBUUIDConvertible, completion: @escaping Withings.ReadCharacRequestCallback)
+  final public func readValue(ofCharac charac: CoreBluetooth.CBCharacteristic, completion: @escaping Withings.ReadCharacRequestCallback)
+  final public func writeValue(ofCharacWithUUID characUUID: Withings.CBUUIDConvertible, fromServiceWithUUID serviceUUID: Withings.CBUUIDConvertible, value: Foundation.Data, type: CoreBluetooth.CBCharacteristicWriteType = .withResponse, completion: @escaping Withings.WriteRequestCallback)
+  final public func writeValue(ofCharac charac: CoreBluetooth.CBCharacteristic, value: Foundation.Data, type: CoreBluetooth.CBCharacteristicWriteType = .withResponse, completion: @escaping Withings.WriteRequestCallback)
+  final public func setNotifyValue(toEnabled enabled: Swift.Bool, forCharacWithUUID characUUID: Withings.CBUUIDConvertible, ofServiceWithUUID serviceUUID: Withings.CBUUIDConvertible, completion: @escaping Withings.UpdateNotificationStateCallback)
+  final public func setNotifyValue(toEnabled enabled: Swift.Bool, ofCharac charac: CoreBluetooth.CBCharacteristic, completion: @escaping Withings.UpdateNotificationStateCallback)
+}
 @objc @_inheritsConvenienceInitializers public class WithingsSyncManager : ObjectiveC.NSObject {
   public enum Status : Swift.Equatable {
     case started(deviceKeys: [Swift.String])
@@ -491,6 +637,14 @@ public protocol Transport : AnyObject {
   @objc public func webView(_ webView: WebKit.WKWebView, decidePolicyFor navigationAction: WebKit.WKNavigationAction, decisionHandler: @escaping (WebKit.WKNavigationActionPolicy) -> Swift.Void)
   @objc deinit
 }
+extension Withings.BLEWrapperError.BluetoothUnavailbleFailureReason : Swift.Equatable {}
+extension Withings.BLEWrapperError.BluetoothUnavailbleFailureReason : Swift.Hashable {}
+extension Withings.BLEWrapperError.Operation : Swift.Equatable {}
+extension Withings.BLEWrapperError.Operation : Swift.Hashable {}
+extension Withings.BLEWrapperError.Operation : Swift.RawRepresentable {}
+extension Withings.AsyncCentralState : Swift.Equatable {}
+extension Withings.AsyncCentralState : Swift.Hashable {}
+extension Withings.AsyncCentralState : Swift.RawRepresentable {}
 extension Withings.CloseCode : Swift.Equatable {}
 extension Withings.CloseCode : Swift.Hashable {}
 extension Withings.CloseCode : Swift.RawRepresentable {}
