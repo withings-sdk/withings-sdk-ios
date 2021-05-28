@@ -10,7 +10,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		DcU7nObzgfw9SFjQQIS8Mw05SmQ=
+		mkZ2IndBdFYJPCS83Fy961KWB9c=
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -22,7 +22,7 @@
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		LsXTAdIjLFyK5W2ouPDhu6+9EWA=
+		lKjHbWxj69k3Ct3JMMidYIi2I+A=
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -34,7 +34,7 @@
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		LsXTAdIjLFyK5W2ouPDhu6+9EWA=
+		lKjHbWxj69k3Ct3JMMidYIi2I+A=
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		fqget1pf1fqxWPfkbkZjU7vnj6U=
+		6qGaQv5s993pEk8otyPvQblBtwo=
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftdoc</key>
 		<data>
@@ -58,7 +58,7 @@
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		fqget1pf1fqxWPfkbkZjU7vnj6U=
+		6qGaQv5s993pEk8otyPvQblBtwo=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -88,7 +88,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			UAyUFc5yCPw6TSl6jGW/t3x2F84Uom0YVuAcOBJYp5Q=
+			19VqvZn3E20hjmEG/Wyl7x8gcDzvlyjoY9k0760htqY=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/arm64.swiftdoc</key>
@@ -109,7 +109,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			UAyUFc5yCPw6TSl6jGW/t3x2F84Uom0YVuAcOBJYp5Q=
+			19VqvZn3E20hjmEG/Wyl7x8gcDzvlyjoY9k0760htqY=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
@@ -130,7 +130,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			kIQui5oMcBEdiOZMkHTyZ8bqy2H5dqp7Vz5yGUSYo7s=
+			s+VgAhF+2gWf6KFHKXJ8wQBtX+GWr4yyu0slvK6cToo=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftdoc</key>
@@ -151,7 +151,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			kIQui5oMcBEdiOZMkHTyZ8bqy2H5dqp7Vz5yGUSYo7s=
+			s+VgAhF+2gWf6KFHKXJ8wQBtX+GWr4yyu0slvK6cToo=
 			</data>
 		</dict>
 	</dict>
