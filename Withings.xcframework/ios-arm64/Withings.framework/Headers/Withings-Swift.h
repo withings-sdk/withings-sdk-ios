@@ -247,26 +247,6 @@ SWIFT_CLASS("_TtC8Withings10BLEWrapper")
 
 
 
-@class NSStream;
-
-SWIFT_CLASS("_TtC8Withings19FoundationTransport")
-@interface FoundationTransport : NSObject <NSStreamDelegate>
-- (void)stream:(NSStream * _Nonnull)aStream handleEvent:(NSStreamEvent)eventCode;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
-
-@class NSURLSession;
-@class NSURLSessionWebSocketTask;
-@class NSData;
-
-SWIFT_CLASS("_TtC8Withings12NativeEngine") SWIFT_AVAILABILITY(tvos,introduced=13.0) SWIFT_AVAILABILITY(watchos,introduced=6.0) SWIFT_AVAILABILITY(ios,introduced=13.0) SWIFT_AVAILABILITY(macos,introduced=10.15)
-@interface NativeEngine : NSObject <NSURLSessionDataDelegate, NSURLSessionWebSocketDelegate>
-- (void)URLSession:(NSURLSession * _Nonnull)session webSocketTask:(NSURLSessionWebSocketTask * _Nonnull)webSocketTask didOpenWithProtocol:(NSString * _Nullable)protocol;
-- (void)URLSession:(NSURLSession * _Nonnull)session webSocketTask:(NSURLSessionWebSocketTask * _Nonnull)webSocketTask didCloseWithCode:(NSURLSessionWebSocketCloseCode)closeCode reason:(NSData * _Nullable)reason;
-- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
-@end
 
 
 
