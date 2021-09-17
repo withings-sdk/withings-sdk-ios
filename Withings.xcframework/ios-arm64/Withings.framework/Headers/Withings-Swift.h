@@ -251,6 +251,7 @@ SWIFT_CLASS("_TtC8Withings10BLEWrapper")
 
 
 
+
 @class NSCoder;
 @class WKWebViewConfiguration;
 

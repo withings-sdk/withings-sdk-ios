@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/Withings-Swift.h</key>
 		<data>
-		ZlQSae71JMHKkpdi1wdCIFhAp1k=
+		u273mlDuhjf80tPGcAaa1nJXsIo=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -22,7 +22,7 @@
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		GLc5nfwU5KyV/DPohT5wjEoNrCs=
+		30hQ3SeFEnfqB9DirGm1AxMBCeU=
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -34,7 +34,7 @@
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		GLc5nfwU5KyV/DPohT5wjEoNrCs=
+		30hQ3SeFEnfqB9DirGm1AxMBCeU=
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		KAmyHHO0qVe3MS7XqNLIzUSioRg=
+		dozQn3C16h83mnEhPvLVR1ijqys=
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftdoc</key>
 		<data>
@@ -58,7 +58,7 @@
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		KAmyHHO0qVe3MS7XqNLIzUSioRg=
+		dozQn3C16h83mnEhPvLVR1ijqys=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -67,7 +67,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			B2fSfyU8PxAv+4mX8479vE/NprxuY2FKjbKmCjE4C7I=
+			VQLwOVWQBuZLkclxkJga1u0l55tVAbsuIsVo67dj+b8=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
@@ -88,7 +88,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			mnNXsMWk/4VZSJHDNdvcvb4PAw+1TOlhBA1snSR/pJM=
+			sekzk9hYdhsUuvcTj0nXWukebijBhmSPFHWL2j9t1KQ=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/arm64.swiftdoc</key>
@@ -109,7 +109,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			mnNXsMWk/4VZSJHDNdvcvb4PAw+1TOlhBA1snSR/pJM=
+			sekzk9hYdhsUuvcTj0nXWukebijBhmSPFHWL2j9t1KQ=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
@@ -130,7 +130,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			nZe7k5VcUUquWOgvqBqa0xZJRlXpVk85O8KcsjBmGlM=
+			8qXGUWBIzuaLIpNA9nUqLT5w7hNgHIOrCDoeE8Dj85w=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftdoc</key>
@@ -151,7 +151,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			nZe7k5VcUUquWOgvqBqa0xZJRlXpVk85O8KcsjBmGlM=
+			8qXGUWBIzuaLIpNA9nUqLT5w7hNgHIOrCDoeE8Dj85w=
 			</data>
 		</dict>
 	</dict>

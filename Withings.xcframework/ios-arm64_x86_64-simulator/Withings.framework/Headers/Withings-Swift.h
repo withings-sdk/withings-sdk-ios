@@ -253,6 +253,7 @@ SWIFT_CLASS("_TtC8Withings10BLEWrapper")
 
 
 
+
 @class NSCoder;
 @class WKWebViewConfiguration;
 
@@ -523,6 +524,7 @@ SWIFT_CLASS("_TtC8Withings10BLEWrapper")
 - (void)centralManager:(CBCentralManager * _Nonnull)central didFailToConnectPeripheral:(CBPeripheral * _Nonnull)peripheral error:(NSError * _Nullable)error;
 - (void)centralManager:(CBCentralManager * _Nonnull)central didDiscoverPeripheral:(CBPeripheral * _Nonnull)peripheral advertisementData:(NSDictionary<NSString *, id> * _Nonnull)advertisementData RSSI:(NSNumber * _Nonnull)RSSI;
 @end
+
 
 
 
