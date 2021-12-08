@@ -6,59 +6,59 @@
 	<dict>
 		<key>Headers/Withings-Swift.h</key>
 		<data>
-		IIW53Ow8lh54ea+Bc8HeBWSC3DA=
+		Ve3CiiDHFYAeRpohY5g44pHuYLE=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		AJxnRXdlfYrs+xmuQokFKNjhBOU=
+		b7ekJCijywj57d+n9CXv2zLVoYE=
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		QmaFaDdz82UxleEXu3AJ7ef1Xww=
+		MiKPJvKL6f+3dh5gXOivOMdaR90=
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		2UonXbDNhGjz6+KETtoCCzUYi/8=
+		uokEhrN19i2Eb3awaWmH5qpq1B0=
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		bp1+1ZWLcWOJpDd57lqycyRkRAY=
+		c/3kRnWu5LDnF+XhzSdb9t5+Rn4=
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64.swiftdoc</key>
 		<data>
-		QmaFaDdz82UxleEXu3AJ7ef1Xww=
+		MiKPJvKL6f+3dh5gXOivOMdaR90=
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64.swiftinterface</key>
 		<data>
-		2UonXbDNhGjz6+KETtoCCzUYi/8=
+		uokEhrN19i2Eb3awaWmH5qpq1B0=
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		bp1+1ZWLcWOJpDd57lqycyRkRAY=
+		c/3kRnWu5LDnF+XhzSdb9t5+Rn4=
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		PkrMF/SZ6ZFXwXrzqM6btL2MVEI=
+		ZaB0B3JXATzGvZOMgYu0Ak41SwM=
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		BzYfB3Ykxkhc5QBaHCanzoOcwGQ=
+		tTbGBzHg0Xe4Xy3N6sesuvS9spE=
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		6laq22KsnguqJXkc2BCsK7VkrNs=
+		ZZ2C2X3H55lX1PFY90rEA8spaIg=
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftdoc</key>
 		<data>
-		PkrMF/SZ6ZFXwXrzqM6btL2MVEI=
+		ZaB0B3JXATzGvZOMgYu0Ak41SwM=
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftinterface</key>
 		<data>
-		BzYfB3Ykxkhc5QBaHCanzoOcwGQ=
+		tTbGBzHg0Xe4Xy3N6sesuvS9spE=
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		6laq22KsnguqJXkc2BCsK7VkrNs=
+		ZZ2C2X3H55lX1PFY90rEA8spaIg=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -67,91 +67,91 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zqW0MRMDqsy7fVtFHLlexI41zLIJIEZkTsWbZFJ1huM=
+			vo+GD5WzXmXCO4rqluvmha8vtWehFPPoeRHDogSo1j0=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			LpVMcKrk5HE6sP9LoADmCCyZWtzjTFP+l6AEXUscY+c=
+			yWyn3OizG9Z+ZyWMmAsB2dbiiidt3WCNqLdVC6Kdlbg=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			3S3m8N5PsTD+vs4eRd93cfTvYMru3m9y/uEQZAPeyMk=
+			cvKauVx2UPCaIja3/o+gOrcWEpuDsO5ndGqfremJ+UA=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Sbp9UWgQw+SzV0pQNB8tmMbbJblfHTMS92qOHIDgow0=
+			7MIngXNfcG+t8W1b+Yu1AjKNAK0K/GVxJ6LeL5m1jRA=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/arm64.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			LpVMcKrk5HE6sP9LoADmCCyZWtzjTFP+l6AEXUscY+c=
+			yWyn3OizG9Z+ZyWMmAsB2dbiiidt3WCNqLdVC6Kdlbg=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/arm64.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			3S3m8N5PsTD+vs4eRd93cfTvYMru3m9y/uEQZAPeyMk=
+			cvKauVx2UPCaIja3/o+gOrcWEpuDsO5ndGqfremJ+UA=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/arm64.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Sbp9UWgQw+SzV0pQNB8tmMbbJblfHTMS92qOHIDgow0=
+			7MIngXNfcG+t8W1b+Yu1AjKNAK0K/GVxJ6LeL5m1jRA=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Zg5sdd/fX0qLp7EacR4Iy43ELh++lh9YnjcgupM3Sgs=
+			qRUtGwrxnQXTpBtBxGKz2hHVrdRQOB6h4/NxoIM8E1U=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			PVnpd8CMsJnOWfRlJLhtH+vj8v+SEf70RSn/Mn9sZBs=
+			i+8Mo+sAVGZrls6qy8i0WS+fYDr0gxHtDa1Gqnf53aI=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			y/Ta3WeGET7VumMlfgzagjqCm/K2tFlE9GX3Yl33q0o=
+			SvQgiQ3r5zVYoYZnsXuwyo/V+lKclu9fFLcsBQq7reA=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Zg5sdd/fX0qLp7EacR4Iy43ELh++lh9YnjcgupM3Sgs=
+			qRUtGwrxnQXTpBtBxGKz2hHVrdRQOB6h4/NxoIM8E1U=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			PVnpd8CMsJnOWfRlJLhtH+vj8v+SEf70RSn/Mn9sZBs=
+			i+8Mo+sAVGZrls6qy8i0WS+fYDr0gxHtDa1Gqnf53aI=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			y/Ta3WeGET7VumMlfgzagjqCm/K2tFlE9GX3Yl33q0o=
+			SvQgiQ3r5zVYoYZnsXuwyo/V+lKclu9fFLcsBQq7reA=
 			</data>
 		</dict>
 	</dict>
