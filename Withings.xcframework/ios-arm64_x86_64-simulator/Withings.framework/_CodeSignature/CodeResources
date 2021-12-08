@@ -22,7 +22,7 @@
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		c/3kRnWu5LDnF+XhzSdb9t5+Rn4=
+		gec+zvCCk37/YMOCFsSTlVyJz9M=
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -34,7 +34,7 @@
 		</data>
 		<key>Modules/Withings.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		c/3kRnWu5LDnF+XhzSdb9t5+Rn4=
+		gec+zvCCk37/YMOCFsSTlVyJz9M=
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		ZZ2C2X3H55lX1PFY90rEA8spaIg=
+		viIBP0RXFYrxffRiFONo1k6v8nE=
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftdoc</key>
 		<data>
@@ -58,7 +58,7 @@
 		</data>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		ZZ2C2X3H55lX1PFY90rEA8spaIg=
+		viIBP0RXFYrxffRiFONo1k6v8nE=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -88,7 +88,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			7MIngXNfcG+t8W1b+Yu1AjKNAK0K/GVxJ6LeL5m1jRA=
+			7KC5MCvMc1hy9Kcgmbgg4XQjJAgQ7zFApih//g8T6K0=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/arm64.swiftdoc</key>
@@ -109,7 +109,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			7MIngXNfcG+t8W1b+Yu1AjKNAK0K/GVxJ6LeL5m1jRA=
+			7KC5MCvMc1hy9Kcgmbgg4XQjJAgQ7zFApih//g8T6K0=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
@@ -130,7 +130,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			SvQgiQ3r5zVYoYZnsXuwyo/V+lKclu9fFLcsBQq7reA=
+			+x986K62wQVAWnvZlfn7ie/5VrNINzMbPOdQk4rVVg4=
 			</data>
 		</dict>
 		<key>Modules/Withings.swiftmodule/x86_64.swiftdoc</key>
@@ -151,7 +151,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			SvQgiQ3r5zVYoYZnsXuwyo/V+lKclu9fFLcsBQq7reA=
+			+x986K62wQVAWnvZlfn7ie/5VrNINzMbPOdQk4rVVg4=
 			</data>
 		</dict>
 	</dict>
