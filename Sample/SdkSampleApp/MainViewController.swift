@@ -21,14 +21,6 @@ class MainViewController: UIViewController {
         notificationLabel.text = ""
     }
     
-    @IBAction func defaultInstallWithingsDevice(_ sender: Any) {
-        notificationLabel.text = ""
-        guard let urlRequest = installWithingsDeviceUrlRequest else { return }
-        navigationController?.pushWithingsWebview(url: urlRequest) { [weak self] (_, notification) in
-            self?.notificationLabel.text = notification.description
-        }
-    }
-    
     @IBAction func customInstallWithingsDevice(_ sender: Any) {
         notificationLabel.text = ""
         guard let urlRequest = installWithingsDeviceUrlRequest else { return }
