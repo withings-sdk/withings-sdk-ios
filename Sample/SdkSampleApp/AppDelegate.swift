@@ -28,27 +28,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Background sync
     
     func restartBackgroundSync() {
-        WithingsBackgroundSyncManager.start(with: ["YOUR-DEVICE-KEY"])
+        WithingsSyncManager.start(with: ["YOUR-DEVICE-KEY"])
     }
     
     private func startBackgroundSync() {
-        NotificationCenter.default.addObserver(forName: WithingsBackgroundSyncStatus.notificationName, object: nil, queue: nil) { [weak self] (notification) in
-            guard let status = notification.userInfo?[WithingsBackgroundSyncStatus.notificationStatusKey] as? WithingsBackgroundSyncStatus else { return }
+        NotificationCenter.default.addObserver(forName: WithingsSyncStatus.notificationName, object: nil, queue: nil) { [weak self] (notification) in
+            guard let status = notification.userInfo?[WithingsSyncStatus.notificationStatusKey] as? WithingsSyncStatus else { return }
             self?.logSyncStatus(status)
         }
         restartBackgroundSync()
     }
     
-    private func logSyncStatus(_ status: WithingsBackgroundSyncStatus) {
+    private func logSyncStatus(_ status: WithingsSyncStatus) {
         let title = "Background sync status"
         let message: String
         switch status {
-        case .started(let deviceId):
-            message = "Sync started for \(deviceId)"
-        case .succeeded(let deviceId):
-            message = "Sync succeeded for \(deviceId)"
-        case .failed(let deviceId):
-            message = "Sync failed for \(deviceId)"
+        case .started(let peripheral):
+            message = "Sync started for \(peripheral.name ?? peripheral.deviceKey)"
+        case .succeeded(let peripheral):
+            message = "Sync succeeded for \(peripheral.name ?? peripheral.deviceKey)"
+        case .failed(let peripheral):
+            message = "Sync failed for \(peripheral.name ?? peripheral.deviceKey)"
+        @unknown default:
+            message = "\(status)"
         }
         print("\(title) -- \(message)")
     }

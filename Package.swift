@@ -4,7 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "Withings",
-    platforms: [.iOS(.v12)],
+    platforms: [.iOS(.v13)],
     products: [
         .library(name: "Withings", targets: ["Withings"]),
     ],

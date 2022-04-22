@@ -1,41 +1,201 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)
-// swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name Withings
+// swift-compiler-version: Apple Swift version 5.6 (swiftlang-5.6.0.323.62 clang-1316.0.20.8)
+// swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name Withings
 import CommonCrypto
 import CoreBluetooth
 import Foundation
-import Network
 import Swift
 import UIKit
 import WebKit
-import zlib
-@objc @_inheritsConvenienceInitializers public class WithingsBackgroundSyncManager : ObjectiveC.NSObject {
-  public class func start(with deviceKeys: [Swift.String])
+import _Concurrency
+@objc @_inheritsConvenienceInitializers public class WithingsSyncManager : ObjectiveC.NSObject {
+  public enum Status : Swift.Equatable {
+    case started(deviceKeys: [Swift.String])
+    case backgroundPaused
+    case stopped
+    public var isStarted: Swift.Bool {
+      get
+    }
+    public static func == (a: Withings.WithingsSyncManager.Status, b: Withings.WithingsSyncManager.Status) -> Swift.Bool
+  }
+  public class var status: Withings.WithingsSyncManager.Status {
+    get
+  }
+  @objc override dynamic public init()
+  public class func start(with deviceKeys: [Swift.String], allowBackgroundScan: Swift.Bool = true)
   public class func stop()
   @objc deinit
-  @objc override dynamic public init()
 }
-public enum WithingsBackgroundSyncStatus {
-  case started(Swift.String)
-  case succeeded(Swift.String)
-  case failed(Swift.String)
+@_hasMissingDesignatedInitializers public class WithingsPeripheral {
+  final public let name: Swift.String?
+  final public let deviceKey: Swift.String
+  @objc deinit
+}
+public enum WithingsSyncStatus {
+  case started(Withings.WithingsPeripheral)
+  case succeeded(Withings.WithingsPeripheral)
+  case failed(Withings.WithingsPeripheral)
   public static let notificationName: Foundation.Notification.Name
   public static let notificationStatusKey: Swift.String
 }
-extension CBPeripheral : Swift.Encodable {
+public enum BLEWrapperError : Swift.Error {
+  public enum BluetoothUnavailbleFailureReason {
+    case unsupported
+    case unauthorized
+    case poweredOff
+    case unknown
+    public static func == (a: Withings.BLEWrapperError.BluetoothUnavailbleFailureReason, b: Withings.BLEWrapperError.BluetoothUnavailbleFailureReason) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum Operation : Swift.String {
+    case connectPeripheral
+    case disconnectPeripheral
+    case readRSSI
+    case discoverServices
+    case discoverIncludedServices
+    case discoverCharacteristics
+    case readCharacteristic
+    case writeCharacteristic
+    case updateNotificationStatus
+    public init?(rawValue: Swift.String)
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  case bluetoothUnavailable(reason: Withings.BLEWrapperError.BluetoothUnavailbleFailureReason)
+  case scanningEndedUnexpectedly
+  case operationTimedOut(operation: Withings.BLEWrapperError.Operation)
+  case invalidPeripheral
+  case peripheralFailedToConnectReasonUnknown
+  case peripheralServiceNotFound(missingServicesUUIDs: [CoreBluetooth.CBUUID])
+  case peripheralCharacteristicNotFound(missingCharacteristicsUUIDs: [CoreBluetooth.CBUUID])
+  case unknownError
+}
+extension Withings.BLEWrapperError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+extension Withings.BLEWrapperError.BluetoothUnavailbleFailureReason {
+  public var localizedDescription: Swift.String {
+    get
+  }
+}
+extension Foundation.NSNotification.Name {
+  public static let CentralStateChange: Foundation.Notification.Name
+  public static let PeripheralCharacteristicValueUpdate: Foundation.Notification.Name
+}
+public enum PeripheralScanResult {
+  case scanStarted
+  case scanResult(peripheral: Withings.Peripheral, advertisementData: [Swift.String : Any], RSSI: Swift.Int?)
+  case scanStopped(error: Withings.BLEWrapperError?)
+}
+public enum AsyncCentralState : Swift.Int {
+  case unsupported
+  case unauthorized
+  case poweredOff
+  case poweredOn
+  case unknown
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public typealias AsyncCentralStateCallback = (Withings.AsyncCentralState) -> Swift.Void
+public typealias BluetoothStateCallback = (CoreBluetooth.CBManagerState) -> Swift.Void
+public typealias PeripheralScanCallback = (Withings.PeripheralScanResult) -> Swift.Void
+public typealias ConnectPeripheralCallback = (Swift.Result<Swift.Void, Swift.Error>) -> Swift.Void
+public typealias DisconnectPeripheralCallback = (Swift.Result<Swift.Void, Swift.Error>) -> Swift.Void
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class BLEWrapper : ObjectiveC.NSObject {
+  @objc deinit
+}
+extension Withings.BLEWrapper {
+  final public var state: CoreBluetooth.CBManagerState {
+    get
+  }
+  final public class func retrievePeripherals(withUUIDs uuids: [Withings.CBUUIDConvertible]) -> [Withings.Peripheral]
+  final public class func retrieveConnectedPeripherals(withServiceUUIDs uuids: [Withings.CBUUIDConvertible]) -> [Withings.Peripheral]
+  final public class func scanForPeripherals(withServiceUUIDs serviceUUIDs: [Withings.CBUUIDConvertible]? = nil, options: [Swift.String : Any]? = nil, timeoutAfter timeout: Foundation.TimeInterval, completion: @escaping Withings.PeripheralScanCallback)
+  final public class func stopScan()
+  final public class func connect(peripheral: CoreBluetooth.CBPeripheral, timeout: Foundation.TimeInterval = 10, _ callback: @escaping Withings.ConnectPeripheralCallback)
+  final public class func disconnect(peripheral: CoreBluetooth.CBPeripheral, timeout: Foundation.TimeInterval = 10, _ callback: @escaping Withings.DisconnectPeripheralCallback)
+}
+extension Withings.BLEWrapper : CoreBluetooth.CBCentralManagerDelegate {
+  @objc final public func centralManagerDidUpdateState(_ central: CoreBluetooth.CBCentralManager)
+  @objc final public func centralManager(_ central: CoreBluetooth.CBCentralManager, didConnect peripheral: CoreBluetooth.CBPeripheral)
+  @objc final public func centralManager(_ central: CoreBluetooth.CBCentralManager, didDisconnectPeripheral peripheral: CoreBluetooth.CBPeripheral, error: Swift.Error?)
+  @objc final public func centralManager(_ central: CoreBluetooth.CBCentralManager, didFailToConnect peripheral: CoreBluetooth.CBPeripheral, error: Swift.Error?)
+  @objc final public func centralManager(_ central: CoreBluetooth.CBCentralManager, didDiscover peripheral: CoreBluetooth.CBPeripheral, advertisementData: [Swift.String : Any], rssi RSSI: Foundation.NSNumber)
+}
+extension CoreBluetooth.CBCharacteristic {
+  public var optionalService: CoreBluetooth.CBService? {
+    get
+  }
+}
+public protocol CBUUIDConvertible {
+  var cbuuid: CoreBluetooth.CBUUID { get }
+}
+extension Foundation.UUID : Withings.CBUUIDConvertible {
+  public var cbuuid: CoreBluetooth.CBUUID {
+    get
+  }
+}
+extension CoreBluetooth.CBAttribute : Withings.CBUUIDConvertible {
+  public var cbuuid: CoreBluetooth.CBUUID {
+    get
+  }
+}
+public func ExtractCBUUIDs(_ CBUUIDConvertibles: [Withings.CBUUIDConvertible]?) -> [CoreBluetooth.CBUUID]?
+public typealias rssi = Swift.Int
+public typealias isNotifying = Swift.Bool
+public typealias ReadRSSIRequestCallback = (_ result: Swift.Result<Withings.rssi, Swift.Error>) -> Swift.Void
+public typealias ServiceRequestCallback = (_ result: Swift.Result<[CoreBluetooth.CBService], Swift.Error>) -> Swift.Void
+public typealias CharacteristicRequestCallback = (_ result: Swift.Result<[CoreBluetooth.CBCharacteristic], Swift.Error>) -> Swift.Void
+public typealias ReadCharacRequestCallback = (_ result: Swift.Result<Foundation.Data, Swift.Error>) -> Swift.Void
+public typealias WriteRequestCallback = (_ result: Swift.Result<Swift.Void, Swift.Error>) -> Swift.Void
+public typealias UpdateNotificationStateCallback = (_ result: Swift.Result<Withings.isNotifying, Swift.Error>) -> Swift.Void
+@_hasMissingDesignatedInitializers final public class Peripheral {
+  @objc deinit
+}
+extension Withings.Peripheral : Swift.Equatable {
+  public static func == (lhs: Withings.Peripheral, rhs: Withings.Peripheral) -> Swift.Bool
+  final public var identifier: Foundation.UUID {
+    get
+  }
+  final public var name: Swift.String? {
+    get
+  }
+  final public var state: CoreBluetooth.CBPeripheralState {
+    get
+  }
+  final public var services: [CoreBluetooth.CBService]? {
+    get
+  }
+  final public func service(withUUID serviceUUID: Withings.CBUUIDConvertible) -> CoreBluetooth.CBService?
+  final public func characteristic(withUUID characteristicUUID: Withings.CBUUIDConvertible, ofServiceWithUUID serviceUUID: Withings.CBUUIDConvertible) -> CoreBluetooth.CBCharacteristic?
+  final public func connect(withTimeout timeout: Foundation.TimeInterval?, completion: @escaping Withings.ConnectPeripheralCallback)
+  final public func disconnect(completion: @escaping Withings.DisconnectPeripheralCallback)
+  final public func readRSSI(completion: @escaping Withings.ReadRSSIRequestCallback)
+  final public func discoverServices(withUUIDs serviceUUIDs: [Withings.CBUUIDConvertible]? = nil, completion: @escaping Withings.ServiceRequestCallback)
+  final public func discoverIncludedServices(withUUIDs includedServiceUUIDs: [Withings.CBUUIDConvertible]? = nil, ofServiceWithUUID serviceUUID: Withings.CBUUIDConvertible, completion: @escaping Withings.ServiceRequestCallback)
+  final public func discoverCharacteristics(withUUIDs characteristicUUIDs: [Withings.CBUUIDConvertible]? = nil, ofServiceWithUUID serviceUUID: Withings.CBUUIDConvertible, completion: @escaping Withings.CharacteristicRequestCallback)
+  final public func readValue(ofCharacWithUUID characUUID: Withings.CBUUIDConvertible, fromServiceWithUUID serviceUUID: Withings.CBUUIDConvertible, completion: @escaping Withings.ReadCharacRequestCallback)
+  final public func writeValue(ofCharacWithUUID characUUID: Withings.CBUUIDConvertible, fromServiceWithUUID serviceUUID: Withings.CBUUIDConvertible, value: Foundation.Data, type: CoreBluetooth.CBCharacteristicWriteType = .withResponse, completion: @escaping Withings.WriteRequestCallback)
+  final public func setNotifyValue(toEnabled enabled: Swift.Bool, forCharacWithUUID characUUID: Withings.CBUUIDConvertible, ofServiceWithUUID serviceUUID: Withings.CBUUIDConvertible, completion: @escaping Withings.UpdateNotificationStateCallback)
+}
+extension CoreBluetooth.CBPeripheral : Swift.Encodable {
   public func encode(to encoder: Swift.Encoder) throws
 }
-extension CBUUID : Swift.Encodable {
+extension CoreBluetooth.CBUUID : Swift.Encodable {
   public func encode(to encoder: Swift.Encoder) throws
 }
-extension CBCharacteristic : Swift.Encodable {
+extension CoreBluetooth.CBCharacteristic : Swift.Encodable {
   public func encode(to encoder: Swift.Encoder) throws
-}
-extension UIViewController {
-  public func presentWithingsWebview(url: Foundation.URLRequest, notificationCallback: @escaping ((UIKit.UIViewController, Withings.WithingsWebViewNotification) -> Swift.Void))
-}
-extension UINavigationController {
-  public func pushWithingsWebview(url: Foundation.URLRequest, notificationCallback: @escaping ((UIKit.UIViewController, Withings.WithingsWebViewNotification) -> Swift.Void))
 }
 public struct WithingsWebViewNotification {
   public var type: Swift.Int {
@@ -48,450 +208,30 @@ public struct WithingsWebViewNotification {
 public struct WithingsInfo {
   public static let version: Swift.String
 }
-public protocol CompressionHandler {
-  func load(headers: [Swift.String : Swift.String])
-  func decompress(data: Foundation.Data, isFinal: Swift.Bool) -> Foundation.Data?
-  func compress(data: Foundation.Data) -> Foundation.Data?
-}
-public class WSCompression : Withings.CompressionHandler {
-  public init()
-  public func load(headers: [Swift.String : Swift.String])
-  public func decompress(data: Foundation.Data, isFinal: Swift.Bool) -> Foundation.Data?
-  public func compress(data: Foundation.Data) -> Foundation.Data?
-  @objc deinit
-}
-extension Data {
-}
-public protocol EngineDelegate : AnyObject {
-  func didReceive(event: Withings.WebSocketEvent)
-}
-public protocol Engine {
-  func register(delegate: Withings.EngineDelegate)
-  func start(request: Foundation.URLRequest)
-  func stop(closeCode: Swift.UInt16)
-  func forceStop()
-  func write(data: Foundation.Data, opcode: Withings.FrameOpCode, completion: (() -> ())?)
-  func write(string: Swift.String, completion: (() -> ())?)
-}
-@objc @_inheritsConvenienceInitializers @available(OSX 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-public class NativeEngine : ObjectiveC.NSObject, Withings.Engine, Foundation.URLSessionDataDelegate, Foundation.URLSessionWebSocketDelegate {
-  public func register(delegate: Withings.EngineDelegate)
-  public func start(request: Foundation.URLRequest)
-  public func stop(closeCode: Swift.UInt16)
-  public func forceStop()
-  public func write(string: Swift.String, completion: (() -> ())?)
-  public func write(data: Foundation.Data, opcode: Withings.FrameOpCode, completion: (() -> ())?)
-  @objc public func urlSession(_ session: Foundation.URLSession, webSocketTask: Foundation.URLSessionWebSocketTask, didOpenWithProtocol protocol: Swift.String?)
-  @objc public func urlSession(_ session: Foundation.URLSession, webSocketTask: Foundation.URLSessionWebSocketTask, didCloseWith closeCode: Foundation.URLSessionWebSocketTask.CloseCode, reason: Foundation.Data?)
-  @objc deinit
-  @objc override dynamic public init()
-}
-public class WSEngine : Withings.Engine, Withings.TransportEventClient, Withings.FramerEventClient, Withings.FrameCollectorDelegate, Withings.HTTPHandlerDelegate {
-  public var respondToPingWithPong: Swift.Bool
-  public init(transport: Withings.Transport, certPinner: Withings.CertificatePinning? = nil, headerValidator: Withings.HeaderValidator = FoundationSecurity(), httpHandler: Withings.HTTPHandler = FoundationHTTPHandler(), framer: Withings.Framer = WSFramer(), compressionHandler: Withings.CompressionHandler? = nil)
-  public func register(delegate: Withings.EngineDelegate)
-  public func start(request: Foundation.URLRequest)
-  public func stop(closeCode: Swift.UInt16 = CloseCode.normal.rawValue)
-  public func forceStop()
-  public func write(string: Swift.String, completion: (() -> ())?)
-  public func write(data: Foundation.Data, opcode: Withings.FrameOpCode, completion: (() -> ())?)
-  public func connectionChanged(state: Withings.ConnectionState)
-  public func didReceiveHTTP(event: Withings.HTTPEvent)
-  public func frameProcessed(event: Withings.FrameEvent)
-  public func decompress(data: Foundation.Data, isFinal: Swift.Bool) -> Foundation.Data?
-  public func didForm(event: Withings.FrameCollector.Event)
-  @objc deinit
-}
-public class FoundationHTTPHandler : Withings.HTTPHandler {
-  public init()
-  public func convert(request: Foundation.URLRequest) -> Foundation.Data
-  public func parse(data: Foundation.Data) -> Swift.Int
-  public func register(delegate: Withings.HTTPHandlerDelegate)
-  @objc deinit
-}
-@_hasMissingDesignatedInitializers public class FoundationHTTPServerHandler : Withings.HTTPServerHandler {
-  public func register(delegate: Withings.HTTPServerDelegate)
-  public func createResponse(headers: [Swift.String : Swift.String]) -> Foundation.Data
-  public func parse(data: Foundation.Data)
-  @objc deinit
-}
-public protocol FrameCollectorDelegate : AnyObject {
-  func didForm(event: Withings.FrameCollector.Event)
-  func decompress(data: Foundation.Data, isFinal: Swift.Bool) -> Foundation.Data?
-}
-@_hasMissingDesignatedInitializers public class FrameCollector {
-  public enum Event {
-    case text(Swift.String)
-    case binary(Foundation.Data)
-    case pong(Foundation.Data?)
-    case ping(Foundation.Data?)
-    case error(Swift.Error)
-    case closed(Swift.String, Swift.UInt16)
-  }
-  public func add(frame: Withings.Frame)
-  @objc deinit
-}
-public enum CloseCode : Swift.UInt16 {
-  case normal
-  case goingAway
-  case protocolError
-  case protocolUnhandledType
-  case noStatusReceived
-  case encoding
-  case policyViolated
-  case messageTooBig
-  public typealias RawValue = Swift.UInt16
-  public var rawValue: Swift.UInt16 {
-    get
-  }
-  public init?(rawValue: Swift.UInt16)
-}
-public enum FrameOpCode : Swift.UInt8 {
-  case continueFrame
-  case textFrame
-  case binaryFrame
-  case connectionClose
-  case ping
-  case pong
-  case unknown
-  public typealias RawValue = Swift.UInt8
-  public init?(rawValue: Swift.UInt8)
-  public var rawValue: Swift.UInt8 {
-    get
-  }
-}
-public struct Frame {
-}
-public enum FrameEvent {
-  case frame(Withings.Frame)
-  case error(Swift.Error)
-}
-public protocol FramerEventClient : AnyObject {
-  func frameProcessed(event: Withings.FrameEvent)
-}
-public protocol Framer {
-  func add(data: Foundation.Data)
-  func register(delegate: Withings.FramerEventClient)
-  func createWriteFrame(opcode: Withings.FrameOpCode, payload: Foundation.Data, isCompressed: Swift.Bool) -> Foundation.Data
-  func updateCompression(supports: Swift.Bool)
-  func supportsCompression() -> Swift.Bool
-}
-public class WSFramer : Withings.Framer {
-  public var compressionEnabled: Swift.Bool
-  public init(isServer: Swift.Bool = false)
-  public func updateCompression(supports: Swift.Bool)
-  public func supportsCompression() -> Swift.Bool
-  public func add(data: Foundation.Data)
-  public func register(delegate: Withings.FramerEventClient)
-  public func createWriteFrame(opcode: Withings.FrameOpCode, payload: Foundation.Data, isCompressed: Swift.Bool) -> Foundation.Data
-  @objc deinit
-}
-public protocol MyWSArrayType {
-}
-extension UInt8 : Withings.MyWSArrayType {
-}
-extension Array where Element : Swift.UnsignedInteger, Element : Withings.MyWSArrayType {
-  public func readUint16(offset: Swift.Int) -> Swift.UInt16
-  public func readUint64(offset: Swift.Int) -> Swift.UInt64
-  public func unmaskData(maskStart: Swift.Int, offset: Swift.Int, length: Swift.Int) -> Foundation.Data
-}
-public func writeUint16(_ buffer: inout [Swift.UInt8], offset: Swift.Int, value: Swift.UInt16)
-public func writeUint32(_ buffer: inout [Swift.UInt8], offset: Swift.Int, value: Swift.UInt32)
-public func writeUint64(_ buffer: inout [Swift.UInt8], offset: Swift.Int, value: Swift.UInt64)
-public enum HTTPUpgradeError : Swift.Error {
-  case notAnUpgrade(Swift.Int)
-  case invalidData
-}
-public struct HTTPWSHeader {
-  public static func createUpgrade(request: Foundation.URLRequest, supportsCompression: Swift.Bool, secKeyValue: Swift.String) -> Foundation.URLRequest
-  public static func generateWebSocketKey() -> Swift.String
-}
-public enum HTTPEvent {
-  case success([Swift.String : Swift.String])
-  case failure(Swift.Error)
-}
-public protocol HTTPHandlerDelegate : AnyObject {
-  func didReceiveHTTP(event: Withings.HTTPEvent)
-}
-public protocol HTTPHandler {
-  func register(delegate: Withings.HTTPHandlerDelegate)
-  func convert(request: Foundation.URLRequest) -> Foundation.Data
-  func parse(data: Foundation.Data) -> Swift.Int
-}
-public protocol HTTPServerDelegate : AnyObject {
-  func didReceive(event: Withings.HTTPEvent)
-}
-public protocol HTTPServerHandler {
-  func register(delegate: Withings.HTTPServerDelegate)
-  func parse(data: Foundation.Data)
-  func createResponse(headers: [Swift.String : Swift.String]) -> Foundation.Data
-}
-public struct URLParts {
-}
-extension URL {
-  public var isTLSScheme: Swift.Bool {
-    get
-  }
-  public func getParts() -> Withings.URLParts?
-}
-public class StringHTTPHandler : Withings.HTTPHandler {
-  public init()
-  public func convert(request: Foundation.URLRequest) -> Foundation.Data
-  public func parse(data: Foundation.Data) -> Swift.Int
-  public func register(delegate: Withings.HTTPHandlerDelegate)
-  @objc deinit
-}
-public enum FoundationSecurityError : Swift.Error {
-  case invalidRequest
-  public static func == (a: Withings.FoundationSecurityError, b: Withings.FoundationSecurityError) -> Swift.Bool
-  public var hashValue: Swift.Int {
-    get
-  }
-  public func hash(into hasher: inout Swift.Hasher)
-}
-public class FoundationSecurity {
-  public init(allowSelfSigned: Swift.Bool = false)
-  @objc deinit
-}
-extension FoundationSecurity : Withings.CertificatePinning {
-  public func evaluateTrust(trust: Security.SecTrust, domain: Swift.String?, completion: ((Withings.PinningState) -> ()))
-}
-extension FoundationSecurity : Withings.HeaderValidator {
-  public func validate(headers: [Swift.String : Swift.String], key: Swift.String) -> Swift.Error?
-}
-public enum SecurityErrorCode : Swift.UInt16 {
-  case acceptFailed
-  case pinningFailed
-  public typealias RawValue = Swift.UInt16
-  public var rawValue: Swift.UInt16 {
-    get
-  }
-  public init?(rawValue: Swift.UInt16)
-}
-public enum PinningState {
-  case success
-  case failed(CoreFoundation.CFError?)
-}
-public protocol CertificatePinning : AnyObject {
-  func evaluateTrust(trust: Security.SecTrust, domain: Swift.String?, completion: ((Withings.PinningState) -> ()))
-}
-public protocol HeaderValidator : AnyObject {
-  func validate(headers: [Swift.String : Swift.String], key: Swift.String) -> Swift.Error?
-}
-public enum ConnectionEvent {
-  case connected([Swift.String : Swift.String])
-  case disconnected(Swift.String, Swift.UInt16)
-  case text(Swift.String)
-  case binary(Foundation.Data)
-  case pong(Foundation.Data?)
-  case ping(Foundation.Data?)
-  case error(Swift.Error)
-}
-public protocol Connection {
-  func write(data: Foundation.Data, opcode: Withings.FrameOpCode)
-}
-public protocol ConnectionDelegate : AnyObject {
-  func didReceive(event: Withings.ServerEvent)
-}
-public enum ServerEvent {
-  case connected(Withings.Connection, [Swift.String : Swift.String])
-  case disconnected(Withings.Connection, Swift.String, Swift.UInt16)
-  case text(Withings.Connection, Swift.String)
-  case binary(Withings.Connection, Foundation.Data)
-  case pong(Withings.Connection, Foundation.Data?)
-  case ping(Withings.Connection, Foundation.Data?)
-}
-public protocol Server {
-  func start(address: Swift.String, port: Swift.UInt16) -> Swift.Error?
-}
-@available(OSX 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
-@available(watchOS, unavailable)
-public class WebSocketServer : Withings.Server, Withings.ConnectionDelegate {
-  public var onEvent: ((Withings.ServerEvent) -> Swift.Void)?
-  public init()
-  public func start(address: Swift.String, port: Swift.UInt16) -> Swift.Error?
-  public func didReceive(event: Withings.ServerEvent)
-  @objc deinit
-}
-@_hasMissingDesignatedInitializers @available(OSX 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
-public class ServerConnection : Withings.Connection, Withings.HTTPServerDelegate, Withings.FramerEventClient, Withings.FrameCollectorDelegate, Withings.TransportEventClient {
-  public var onEvent: ((Withings.ConnectionEvent) -> Swift.Void)?
-  weak public var delegate: Withings.ConnectionDelegate?
-  public func write(data: Foundation.Data, opcode: Withings.FrameOpCode)
-  public func connectionChanged(state: Withings.ConnectionState)
-  public func didReceive(event: Withings.HTTPEvent)
-  public func frameProcessed(event: Withings.FrameEvent)
-  public func didForm(event: Withings.FrameCollector.Event)
-  public func decompress(data: Foundation.Data, isFinal: Swift.Bool) -> Foundation.Data?
-  @objc deinit
-}
-public enum ErrorType : Swift.Error {
-  case compressionError
-  case securityError
-  case protocolError
-  case serverError
-  public static func == (a: Withings.ErrorType, b: Withings.ErrorType) -> Swift.Bool
-  public var hashValue: Swift.Int {
-    get
-  }
-  public func hash(into hasher: inout Swift.Hasher)
-}
-public struct WSError : Swift.Error {
-  public let type: Withings.ErrorType
-  public let message: Swift.String
-  public let code: Swift.UInt16
-  public init(type: Withings.ErrorType, message: Swift.String, code: Swift.UInt16)
-}
-public protocol WebSocketClient : AnyObject {
-  func connect()
-  func disconnect(closeCode: Swift.UInt16)
-  func write(string: Swift.String, completion: (() -> ())?)
-  func write(stringData: Foundation.Data, completion: (() -> ())?)
-  func write(data: Foundation.Data, completion: (() -> ())?)
-  func write(ping: Foundation.Data, completion: (() -> ())?)
-  func write(pong: Foundation.Data, completion: (() -> ())?)
-}
-extension WebSocketClient {
-  public func write(string: Swift.String)
-  public func write(data: Foundation.Data)
-  public func write(ping: Foundation.Data)
-  public func write(pong: Foundation.Data)
-  public func disconnect()
-}
-public enum WebSocketEvent {
-  case connected([Swift.String : Swift.String])
-  case disconnected(Swift.String, Swift.UInt16)
-  case text(Swift.String)
-  case binary(Foundation.Data)
-  case pong(Foundation.Data?)
-  case ping(Foundation.Data?)
-  case error(Swift.Error?)
-  case viabilityChanged(Swift.Bool)
-  case reconnectSuggested(Swift.Bool)
-  case cancelled
-}
-public protocol WebSocketDelegate : AnyObject {
-  func didReceive(event: Withings.WebSocketEvent, client: Withings.WebSocket)
-}
-open class WebSocket : Withings.WebSocketClient, Withings.EngineDelegate {
-  weak public var delegate: Withings.WebSocketDelegate?
-  public var onEvent: ((Withings.WebSocketEvent) -> Swift.Void)?
-  public var request: Foundation.URLRequest
-  public var callbackQueue: Dispatch.DispatchQueue
-  public var respondToPingWithPong: Swift.Bool {
-    get
-    set
-  }
-  public init(request: Foundation.URLRequest, engine: Withings.Engine)
-  convenience public init(request: Foundation.URLRequest, certPinner: Withings.CertificatePinning? = FoundationSecurity(), compressionHandler: Withings.CompressionHandler? = nil, useCustomEngine: Swift.Bool = true)
-  public func connect()
-  public func disconnect(closeCode: Swift.UInt16 = CloseCode.normal.rawValue)
-  public func forceDisconnect()
-  public func write(data: Foundation.Data, completion: (() -> ())?)
-  public func write(string: Swift.String, completion: (() -> ())?)
-  public func write(stringData: Foundation.Data, completion: (() -> ())?)
-  public func write(ping: Foundation.Data, completion: (() -> ())?)
-  public func write(pong: Foundation.Data, completion: (() -> ())?)
-  public func didReceive(event: Withings.WebSocketEvent)
-  @objc deinit
-}
-public enum FoundationTransportError : Swift.Error {
-  case invalidRequest
-  case invalidOutputStream
-  case timeout
-  public static func == (a: Withings.FoundationTransportError, b: Withings.FoundationTransportError) -> Swift.Bool
-  public var hashValue: Swift.Int {
-    get
-  }
-  public func hash(into hasher: inout Swift.Hasher)
-}
-@objc public class FoundationTransport : ObjectiveC.NSObject, Withings.Transport, Foundation.StreamDelegate {
-  public var usingTLS: Swift.Bool {
-    get
-  }
-  public init(streamConfiguration: ((Foundation.InputStream, Foundation.OutputStream) -> Swift.Void)? = nil)
-  @objc deinit
-  public func connect(url: Foundation.URL, timeout: Swift.Double = 10, certificatePinning: Withings.CertificatePinning? = nil)
-  public func disconnect()
-  public func register(delegate: Withings.TransportEventClient)
-  public func write(data: Foundation.Data, completion: @escaping ((Swift.Error?) -> ()))
-  @objc open func stream(_ aStream: Foundation.Stream, handle eventCode: Foundation.Stream.Event)
-  @objc override dynamic public init()
-}
-public enum TCPTransportError : Swift.Error {
-  case invalidRequest
-  public static func == (a: Withings.TCPTransportError, b: Withings.TCPTransportError) -> Swift.Bool
-  public var hashValue: Swift.Int {
-    get
-  }
-  public func hash(into hasher: inout Swift.Hasher)
-}
-@available(OSX 10.14, iOS 12.0, watchOS 5.0, tvOS 12.0, *)
-public class TCPTransport : Withings.Transport {
-  public var usingTLS: Swift.Bool {
-    get
-  }
-  public init(connection: Network.NWConnection)
-  public init()
-  public func connect(url: Foundation.URL, timeout: Swift.Double = 10, certificatePinning: Withings.CertificatePinning? = nil)
-  public func disconnect()
-  public func register(delegate: Withings.TransportEventClient)
-  public func write(data: Foundation.Data, completion: @escaping ((Swift.Error?) -> ()))
-  @objc deinit
-}
-public enum ConnectionState {
-  case connected
-  case waiting
-  case cancelled
-  case failed(Swift.Error?)
-  case viability(Swift.Bool)
-  case shouldReconnect(Swift.Bool)
-  case receive(Foundation.Data)
-}
-public protocol TransportEventClient : AnyObject {
-  func connectionChanged(state: Withings.ConnectionState)
-}
-public protocol Transport : AnyObject {
-  func register(delegate: Withings.TransportEventClient)
-  func connect(url: Foundation.URL, timeout: Swift.Double, certificatePinning: Withings.CertificatePinning?)
-  func disconnect()
-  func write(data: Foundation.Data, completion: @escaping ((Swift.Error?) -> ()))
-  var usingTLS: Swift.Bool { get }
-}
-@objc @_hasMissingDesignatedInitializers open class WebBluetoothWebView : WebKit.WKWebView {
-  @objc required dynamic public init?(coder: Foundation.NSCoder)
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) open class WebBluetoothWebView : WebKit.WKWebView {
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
   @objc deinit
   @objc override dynamic open func observeValue(forKeyPath keyPath: Swift.String?, of object: Any?, change: [Foundation.NSKeyValueChangeKey : Any]?, context: Swift.UnsafeMutableRawPointer?)
-  @objc override dynamic public init(frame: CoreGraphics.CGRect, configuration: WebKit.WKWebViewConfiguration)
 }
-@objc @_hasMissingDesignatedInitializers open class WithingsWebView : Withings.WebBluetoothWebView, WebKit.WKNavigationDelegate {
-  public var isBusy: Swift.Bool {
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) open class WithingsWebView : Withings.WebBluetoothWebView, WebKit.WKNavigationDelegate {
+  @_Concurrency.MainActor(unsafe) public var isBusy: Swift.Bool {
     get
   }
-  public init(frame: CoreGraphics.CGRect, configuration: WebKit.WKWebViewConfiguration, polyfillJs: Swift.String? = nil, notificationCallback: @escaping ((Withings.WithingsWebViewNotification) -> Swift.Void))
-  @objc required dynamic public init?(coder: Foundation.NSCoder)
-  @objc override dynamic open var navigationDelegate: WebKit.WKNavigationDelegate? {
-    @objc get
-    @objc set
+  @_Concurrency.MainActor(unsafe) public init(frame: CoreGraphics.CGRect, configuration: WebKit.WKWebViewConfiguration, polyfillJs: Swift.String? = nil, notificationCallback: @escaping ((Withings.WithingsWebViewNotification) -> Swift.Void))
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open var navigationDelegate: WebKit.WKNavigationDelegate? {
+    @_Concurrency.MainActor(unsafe) @objc get
+    @_Concurrency.MainActor(unsafe) @objc set
   }
   @objc override dynamic open func observeValue(forKeyPath keyPath: Swift.String?, of object: Any?, change: [Foundation.NSKeyValueChangeKey : Any]?, context: Swift.UnsafeMutableRawPointer?)
-  @objc public func webView(_ webView: WebKit.WKWebView, decidePolicyFor navigationAction: WebKit.WKNavigationAction, decisionHandler: @escaping (WebKit.WKNavigationActionPolicy) -> Swift.Void)
+  @_Concurrency.MainActor(unsafe) @objc public func webView(_ webView: WebKit.WKWebView, decidePolicyFor navigationAction: WebKit.WKNavigationAction, decisionHandler: @escaping (WebKit.WKNavigationActionPolicy) -> Swift.Void)
   @objc deinit
 }
-extension Withings.CloseCode : Swift.Equatable {}
-extension Withings.CloseCode : Swift.Hashable {}
-extension Withings.CloseCode : Swift.RawRepresentable {}
-extension Withings.FrameOpCode : Swift.Equatable {}
-extension Withings.FrameOpCode : Swift.Hashable {}
-extension Withings.FrameOpCode : Swift.RawRepresentable {}
-extension Withings.FoundationSecurityError : Swift.Equatable {}
-extension Withings.FoundationSecurityError : Swift.Hashable {}
-extension Withings.SecurityErrorCode : Swift.Equatable {}
-extension Withings.SecurityErrorCode : Swift.Hashable {}
-extension Withings.SecurityErrorCode : Swift.RawRepresentable {}
-extension Withings.ErrorType : Swift.Equatable {}
-extension Withings.ErrorType : Swift.Hashable {}
-extension Withings.FoundationTransportError : Swift.Equatable {}
-extension Withings.FoundationTransportError : Swift.Hashable {}
-extension Withings.TCPTransportError : Swift.Equatable {}
-extension Withings.TCPTransportError : Swift.Hashable {}
+extension Withings.BLEWrapperError.BluetoothUnavailbleFailureReason : Swift.Equatable {}
+extension Withings.BLEWrapperError.BluetoothUnavailbleFailureReason : Swift.Hashable {}
+extension Withings.BLEWrapperError.Operation : Swift.Equatable {}
+extension Withings.BLEWrapperError.Operation : Swift.Hashable {}
+extension Withings.BLEWrapperError.Operation : Swift.RawRepresentable {}
+extension Withings.AsyncCentralState : Swift.Equatable {}
+extension Withings.AsyncCentralState : Swift.Hashable {}
+extension Withings.AsyncCentralState : Swift.RawRepresentable {}
